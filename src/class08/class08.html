@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>cesium第八课 - 数据查询</title>
+  <script src="../../libs/Cesium/Cesium.js"></script>
+  <link rel="stylesheet" href="../../libs/Cesium/Widgets/widgets.css">
+  <style>
+    html,
+    body,
+    #container {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+  </style>
+</head>
+<body>
+  <div id="container"></div>
+
+  <script>
+
+    // 加载地图
+    const esri = new Cesium.ArcGisMapServerImageryProvider({
+      url: "https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer"
+    })
+    Cesium.Ion.defaultAccessToken="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJlMmY0YjNlYy0wM2QxLTRmYjItYmFjYi0yZTE5YmNlYjM3NGYiLCJpZCI6ODIzOTAsImlhdCI6MTY0NDgyMjEzMH0.Plh5uMf1sa2U6feFqUPUTRyYxE-QOTxYfAz6d8pMJSs"
+    
+    // const viewer = new Cesium.Viewer('container')
+    const viewer = new Cesium.Viewer('container', {
+      baseLayerPicker: false,
+      imagreyProvider: esri,
+      terrainProvider: new Cesium.CesiumTerrainProvider({
+        url: Cesium.IonResource.fromAssetId(1),
+        requestVertexNormals: true,
+        requestWaterMask: true
+      })
+    })
+    // 设置相机信息
+    viewer.camera.setView({
+      destination: Cesium.Cartesian3.fromDegrees(116.39, 39.91, 2500.0),
+      orientation: {
+        heading: Cesium.Math.toRadians(0),
+        pitch: Cesium.Math.toRadians(-90.0),
+        roll: 0.0
+      }
+    })
+
+    // 空间数据加载
+    const position = new Cesium.Cartesian3.fromDegrees(116.39, 39.91, 0)
+   
+
+    const entity = viewer.entities.add({
+      id: 'planeLogo',
+      position: position,
+      plane: {
+        plane: new Cesium.Plane(Cesium.Cartesian3.UNIT_Z, 0.0),
+        dimensions: new Cesium.Cartesian2(400, 300),
+        material: "../../libs/SampleData/test.jpg",
+        outline: true,
+        outlineColor: Cesium.Color.BLACK
+      },
+      description: `<div>
+        <img height="150px" src="../../libs/SampleData/test.jpg" />
+        <h3>实战demo</h3>
+        </div>`
+    })
+
+    const handler = new Cesium.ScreenSpaceEventHandler(viewer.scene.canvas)
+    handler.setInputAction(function(movement) {
+      const pick = viewer.scene.pick(movement.position)
+      if (Cesium.defined(pick) && pick.id.id === 'planeLogo') {
+        alert(1)
+      }
+    }, Cesium.ScreenSpaceEventType.LEFT_CLICK)
+
+    /* 
+     * Cesium获取不同对象的方法：
+     * scene-pick 包含给定窗口位置基元的对象
+     * scene-drillpick 给定窗口位置所以对象的列表
+     * Globe.pick 给定光线和地形的交点
+     */
+
+     /* 
+     * Cesium的鼠标监听事件：
+     * Cesium.ScreenSpaceEventType.MIDDLE_CLICK 鼠标中键点击事件
+     * Cesium.ScreenSpaceEventType.MOUSE_MOVE 鼠标移入事件
+     * Cesium.ScreenSpaceEventType.LEFT_CLICK 鼠标左键点击事件
+     * Cesium.ScreenSpaceEventType.RIGHT_CLICK 鼠标右键点击事件
+     */
+  
+  </script>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>cesium第四课 - 地图与地形图的加载</title>
+  <script src="../../libs/Cesium/Cesium.js"></script>
+  <link rel="stylesheet" href="../../libs/Cesium/Widgets/widgets.css">
+  <style>
+    html,
+    body,
+    #container {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+  </style>
+</head>
+<body>
+  <div id="container"></div>
+
+  <script>
+    // 加载地图
+    const esri = new Cesium.ArcGisMapServerImageryProvider({
+      url: "https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer"
+    })
+    Cesium.Ion.defaultAccessToken="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJlMmY0YjNlYy0wM2QxLTRmYjItYmFjYi0yZTE5YmNlYjM3NGYiLCJpZCI6ODIzOTAsImlhdCI6MTY0NDgyMjEzMH0.Plh5uMf1sa2U6feFqUPUTRyYxE-QOTxYfAz6d8pMJSs"
+    
+    const viewer = new Cesium.Viewer('container', {
+      baseLayerPicker: false,
+      imagreyProvider: esri,
+      terrainProvider: new Cesium.CesiumTerrainProvider({
+        url: Cesium.IonResource.fromAssetId(1),
+        requestVertexNormals: true,
+        requestWaterMask: true
+      })
+    })
+    
+    // const layer = viewer.imageryLayers.addImageryProvider(
+    //   new Cesium.IonImageryProvider({ assetId: 3812 })
+    // );
+
+  </script>
+</body>
+</html>

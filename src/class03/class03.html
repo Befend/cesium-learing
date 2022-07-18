@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>cesium第三课 - 相机系统</title>
+  <script src="../../libs/Cesium/Cesium.js"></script>
+  <link rel="stylesheet" href="../../libs/Cesium/Widgets/widgets.css">
+  <style>
+    html,
+    body,
+    #container {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+  </style>
+</head>
+<body>
+  <div id="container"></div>
+
+  <script>
+    Cesium.Ion.defaultAccessToken="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJlMmY0YjNlYy0wM2QxLTRmYjItYmFjYi0yZTE5YmNlYjM3NGYiLCJpZCI6ODIzOTAsImlhdCI6MTY0NDgyMjEzMH0.Plh5uMf1sa2U6feFqUPUTRyYxE-QOTxYfAz6d8pMJSs"
+    
+    const viewer = new Cesium.Viewer('container')
+    
+    // Cesium 相机系统
+
+    // 存储飞行目的地的坐标
+    // setView 通过定义相机飞行目的地的三维坐标和视线方向，将视角直接切换到所设定的视域范围内
+    // const position = Cesium.Cartesian3.fromDegrees(116.39, 39.91, 400)
+    // viewer.camera.setView({
+    //   destination: position, // 设置相机系统飞行的目的地
+    //   orientation: { // 设定相机视口的方向
+    //     heading: Cesium.Math.toRadians(0), // 控制视口的水平旋转，即沿着y轴旋转，当数值为0时，代表正北方向
+    //     pitch: Cesium.Math.toRadians(-90), // 控制视口的上下旋转，即沿X轴进行旋转，当数值为-90，则是俯视朝向地面
+    //     roll: 0 // 控制视口的翻滚角度，即沿着Z轴进行旋转，数值为0，表示不翻转
+    //   }
+    // })
+
+    // flyTo 具有空中飞行逐步切换视域的效果，还可以设置飞行时间
+    // const position = Cesium.Cartesian3.fromDegrees(116.39, 39.91, 400)
+    // viewer.camera.flyTo({
+    //   destination: position, // 设置相机系统飞行的目的地
+    //   orientation: { // 设定相机视口的方向
+    //     heading: Cesium.Math.toRadians(0), // 控制视口的水平旋转，即沿着y轴旋转，当数值为0时，代表正北方向
+    //     pitch: Cesium.Math.toRadians(-90), // 控制视口的上下旋转，即沿X轴进行旋转，当数值为-90，则是俯视朝向地面
+    //     roll: 0 // 控制视口的翻滚角度，即沿着Z轴进行旋转，数值为0，表示不翻转
+    //   },
+    //   duration: 5 // 设置飞行时间
+    // })
+
+    // lookAt 直接将视角跳转到设置目的地上，但是我们用鼠标任意旋转视角方向，是不会改变其位置的，一般用于锁定某个场景的视角
+    // 给相机的目的地设置一个位置
+    // const center = Cesium.Cartesian3.fromDegrees(116.39, 39.91)
+    // const heading = Cesium.Math.toRadians(50) // 设置一个水平旋转视口的角度
+    // const pitch = Cesium.Math.toRadians(-90) // 设置一个垂直旋转视口的角度
+    // const range = 6000 // 设置相机距离目标点的高度
+    // viewer.camera.lookAt(center, new Cesium.HeadingPitchRange(heading, pitch, range));
+
+    // viewBoundingSphere 效果和setView差不多，但它可以给一个指定的目标点，让我们从多个角度更好的观测
+    const position = Cesium.Cartesian3.fromDegrees(116.39, 39.91, 1500)
+    const orientation = Cesium.Transforms.headingPitchRollQuaternion(position, new Cesium.HeadingPitchRoll(-90, 0, 0))
+    const entity = viewer.entities.add({
+      position: position,
+      orientation: orientation,
+      model: { // 用于存储模型的各种信息
+        uri: "../../libs/SampleData/models/CesiumAir/Cesium_Air.glb",
+        // 用于设置模型缩放最小情况下的大小
+        minimumPixelSize: 100,
+        // 用于设置模型缩放最大的比例
+        maximumScale: 10000,
+        show: true
+      }
+    })
+    viewer.camera.viewBoundingSphere(new Cesium.BoundingSphere(position, 20), new Cesium.HeadingPitchRange(0, 0, 0));
+
+  </script>
+</body>
+</html>

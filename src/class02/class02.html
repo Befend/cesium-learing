@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>cesium第二课 - 查看器、场景、实体、数据源介绍</title>
+  <script src="../../libs/Cesium/Cesium.js"></script>
+  <link rel="stylesheet" href="../../libs/Cesium/Widgets/widgets.css">
+  <style>
+    html,
+    body,
+    #container {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+  </style>
+</head>
+<body>
+  <div id="container"></div>
+
+  <script>
+    Cesium.Ion.defaultAccessToken="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJlMmY0YjNlYy0wM2QxLTRmYjItYmFjYi0yZTE5YmNlYjM3NGYiLCJpZCI6ODIzOTAsImlhdCI6MTY0NDgyMjEzMH0.Plh5uMf1sa2U6feFqUPUTRyYxE-QOTxYfAz6d8pMJSs"
+    // Viewer Scene Entity DataSourceCollection
+    // new Cesium.Viewer(cesiumContainer, option)
+    const viewer = new Cesium.Viewer('container', {
+      animation: false,
+      timeline: false
+    })
+    // Scene
+    viewer.scene.globe.show = true;
+    console.log(viewer.imageLayers === viewer.scene.imageLayers);
+    // 设置相机属性
+    // viewer.scene.camera.setView({
+    //   destination: Cesium.Cartesian3.fromDegrees(116.39, 39.9, 1500)
+    // })
+
+    // Entity
+    // const entity = viewer.entities.add({
+    //   position: Cesium.Cartesian3.fromDegrees(116.39, 39.91, 400), // 参数分别是经度、纬度和高度
+    //   point: {
+    //     pixelSize: 100,
+    //     color: new Cesium.Color(0, 1, 0, 1)
+    //   }
+    // })
+    // viewer.trackedEntity = entity;
+
+    // DataSourceCollection
+    // 三种调用方法： CzmlDataSource KmlDataSource GeoJsonDataSource
+    viewer.dataSources.add(
+      Cesium.GeoJsonDataSource.load(
+        "../../libs/SampleData/ne_10m_us_states.topojson"
+      )
+    )
+  </script>
+</body>
+</html>
